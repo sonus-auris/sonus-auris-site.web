@@ -1,0 +1,94 @@
+---
+const features = [
+  {
+    icon: "♾️",
+    title: "Always-on rolling buffer",
+    body: "A continuous loop quietly captures everything, keeping the last 24 hours so the moment is already saved before you knew you wanted it.",
+  },
+  {
+    icon: "☁️",
+    title: "Automatic cloud backup",
+    body: "Encrypted on your phone, then synced to the cloud over Wi-Fi. Lose your phone, keep your memories. Only smart-uploads when you're on power & network.",
+  },
+  {
+    icon: "🔖",
+    title: "One-tap bookmarks",
+    body: "Heard something good? Tap once — or say the word — and Sonus Auris flags that slice of the timeline so it's trivial to find later.",
+  },
+  {
+    icon: "✂️",
+    title: "Clean clip export",
+    body: "Trim any moment to a tidy clip and send it to your DAW, your lawyer, or your group chat. Lossless audio, no re-encoding mush.",
+  },
+  {
+    icon: "🔋",
+    title: "Built to sip battery",
+    body: "Efficient on-device encoding and a battery-aware uploader mean it runs all day without turning your phone into a hand-warmer.",
+  },
+  {
+    icon: "🔑",
+    title: "Keys you control",
+    body: "Recordings are encrypted with keys derived on your device. Not even we can listen. Privacy isn't a setting — it's the architecture.",
+  },
+];
+---
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">🎛️ Everything it does</span>
+      <h2>Small app. Serious memory.</h2>
+      <p>Powerful where it counts, invisible the rest of the time.</p>
+    </div>
+
+    <div class="feat-grid">
+      {features.map((f) => (
+        <article class="feat card">
+          <div class="feat-icon">{f.icon}</div>
+          <h3>{f.title}</h3>
+          <p>{f.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .feat-grid {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 1fr;
+  }
+  .feat {
+    padding: 28px 26px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .feat:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .feat-icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    font-size: 1.7rem;
+    border-radius: 16px;
+    background: var(--green-50);
+    border: 1px solid var(--green-200);
+    margin-bottom: 16px;
+  }
+  .feat h3 {
+    font-size: 1.22rem;
+  }
+  .feat p {
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  @media (min-width: 700px) {
+    .feat-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1000px) {
+    .feat-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

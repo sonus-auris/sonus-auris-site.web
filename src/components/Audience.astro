@@ -1,0 +1,118 @@
+---
+const audiences = [
+  {
+    emoji: "🎶",
+    tag: "For musicians & creators",
+    title: "Never lose the riff again",
+    body: "Inspiration doesn't schedule itself. That hook you hummed in the shower, the jam that happened by accident, the melody you nailed once and never again — Sonus Auris has been rolling the whole time. Scrub back, clip it, and keep it forever.",
+    points: ["Rolling 24-hour buffer", "Tap to bookmark a moment", "Export clean clips to your DAW"],
+    accent: "green",
+  },
+  {
+    emoji: "🛡️",
+    tag: "For peace of mind",
+    title: "Your side of the story, kept",
+    body: "If an altercation, a dispute, or a false allegation ever comes your way, memory is a weak defense. An honest, timestamped audio record isn't. Sonus Auris keeps a tamper-evident log that's there when you need it — and private until you do.",
+    points: ["Timestamped, tamper-evident", "You alone hold the keys", "Share only the clip that matters"],
+    accent: "orange",
+  },
+];
+---
+
+<section class="section audience" id="why">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">🚗 Like a dashcam, for sound</span>
+      <h2>Two reasons people keep it running</h2>
+      <p>
+        A dashcam doesn't decide which moments matter — it just never stops
+        watching the road. Sonus Auris does the same for the audio of your life.
+      </p>
+    </div>
+
+    <div class="aud-grid">
+      {audiences.map((a) => (
+        <article class={`card aud-card ${a.accent}`}>
+          <div class="aud-emoji">{a.emoji}</div>
+          <span class="aud-tag">{a.tag}</span>
+          <h3>{a.title}</h3>
+          <p>{a.body}</p>
+          <ul>
+            {a.points.map((p) => (
+              <li>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4 10-11"></path>
+                </svg>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .audience {
+    background: var(--paper-2);
+  }
+  .aud-grid {
+    display: grid;
+    gap: 26px;
+    grid-template-columns: 1fr;
+  }
+  .aud-card {
+    padding: 34px 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .aud-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 6px;
+  }
+  .aud-card.green::before { background: linear-gradient(90deg, var(--green-400), var(--green-700)); }
+  .aud-card.orange::before { background: linear-gradient(90deg, var(--orange-400), var(--orange-600)); }
+  .aud-emoji {
+    font-size: 2.6rem;
+    margin-bottom: 12px;
+  }
+  .aud-tag {
+    display: inline-block;
+    font-weight: 800;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .green .aud-tag { color: var(--green-700); }
+  .orange .aud-tag { color: var(--orange-600); }
+  .aud-card h3 {
+    font-size: 1.5rem;
+  }
+  .aud-card p {
+    color: var(--ink-soft);
+  }
+  .aud-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 18px 0 0;
+    display: grid;
+    gap: 10px;
+  }
+  .aud-card li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+  }
+  .green li svg { color: var(--green-500); }
+  .orange li svg { color: var(--orange-500); }
+  @media (min-width: 820px) {
+    .aud-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
