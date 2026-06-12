@@ -1,8 +1,8 @@
 ---
 const GITHUB_URL = "https://github.com/sonus-auris/sonus-auris";
 const points = [
-  "Every line of the app and backup pipeline is public.",
-  "Audit the crypto yourself — or have your security friend do it.",
+  "Every line of the mobile app is public.",
+  "Audit the on-device encryption yourself — or have your security friend do it.",
   "Reproducible builds so the app you install matches the source.",
   "Issues, PRs, and roadmap out in the open.",
 ];
@@ -11,12 +11,13 @@ const points = [
 <section class="section os" id="open-source">
   <div class="container os-inner card">
     <div class="os-copy">
-      <span class="eyebrow">💚 Open source, top to bottom</span>
-      <h2>Don't trust us — read the code</h2>
+      <span class="eyebrow">💚 The mobile app is open source</span>
+      <h2>Don't trust us — read the app's code</h2>
       <p>
-        The strongest privacy promise is one you can verify. The entire Sonus
-        Auris codebase lives on GitHub: the mobile app, the encryption, and the
-        backup service. Inspect it, fork it, build it yourself.
+        The strongest privacy promise is one you can verify. The full Sonus Auris
+        <strong>mobile app</strong> — including the on-device encryption that
+        seals your audio before it ever leaves your phone — lives on GitHub.
+        Inspect it, fork it, build it yourself.
       </p>
       <ul class="os-points">
         {points.map((p) => (
