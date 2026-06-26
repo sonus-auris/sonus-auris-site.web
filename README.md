@@ -6,7 +6,9 @@
 > `remote/submodules/sonus-auris-site.web` — make changes here, not in that submodule checkout.
 >
 > On disk: source clone `~/codes/sonus-auris/sonus-auris-site.web` · submodule checkout `~/codes/ores/k8s-cluster/remote/submodules/sonus-auris-site.web`.
-<!-- END k8s-cluster-submodule-notice --># sonus-auris-site.web
+<!-- END k8s-cluster-submodule-notice -->
+
+# sonus-auris-site.web
 
 Marketing website for **Sonus Auris** — *a dashcam for audio*. An always-on
 recording app that keeps a rolling buffer of your audio and backs it up,
