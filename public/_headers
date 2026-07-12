@@ -1,9 +1,17 @@
 # Security headers for the static Sonus Auris site.
 #
-# This file is consumed by Netlify and Cloudflare Pages. On hosts that ignore
-# `_headers` (Vercel, S3 + CloudFront, nginx, ...) configure the equivalent
-# response headers there instead. The site ships no client JavaScript and no
-# forms, so the policy below is intentionally tight.
+# WARNING: the current deploy target is GitHub Pages (see astro.config.mjs +
+# .github/workflows/deploy.yml), and GitHub Pages does NOT honor `_headers` —
+# this file is published as an inert text file at /_headers and NONE of the
+# headers below are actually served. To enforce them, move hosting to a host
+# that reads `_headers` (Netlify / Cloudflare Pages) or put the equivalent
+# response headers in front of the origin (Cloudflare rules, CDN, nginx).
+# A `<meta http-equiv>` CSP can approximate script/style/frame-src in the
+# markup, but X-Frame-Options / frame-ancestors / HSTS require a real response
+# header and cannot be set from static HTML on GitHub Pages.
+#
+# The site ships no client JavaScript and no forms, so the policy below is
+# intentionally tight and the practical XSS/clickjacking surface is small.
 /*
   Content-Security-Policy: default-src 'self'; base-uri 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
