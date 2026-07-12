@@ -3,6 +3,7 @@ import Logo from "./Logo.astro";
 import Partners from "./Partners.astro";
 const GITHUB_URL = "https://github.com/sonus-auris/sonus-auris";
 const year = new Date().getFullYear();
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <footer class="footer">
@@ -38,9 +39,9 @@ const year = new Date().getFullYear();
 
     <nav class="foot-col" aria-label="Legal">
       <h4>Legal</h4>
-      <a href="#privacy">Privacy policy</a>
-      <a href="#privacy">Terms of use</a>
-      <a href="#privacy">Responsible recording</a>
+      <a href={`${base}/privacy/`}>Privacy policy</a>
+      <a href={`${base}/account-deletion/`}>Delete your account &amp; data</a>
+      <a href={`${base}/privacy/#recording-responsibly`}>Responsible recording</a>
     </nav>
   </div>
 

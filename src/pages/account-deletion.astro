@@ -1,0 +1,71 @@
+---
+import Legal from "../layouts/Legal.astro";
+
+// Keep this address in sync with privacy.astro. Google Play requires this page
+// to be reachable WITHOUT logging in or reinstalling the app.
+const CONTACT_EMAIL = "<privacy@yourdomain>";
+const NEEDS_FILL = CONTACT_EMAIL.startsWith("<");
+---
+
+<Legal
+  title="Delete your account and data"
+  description="How to delete your Sonus Auris account and associated data, in-app or by request."
+>
+  <h1>Delete your Sonus Auris account and data</h1>
+
+  {NEEDS_FILL && (
+    <p class="todo">
+      <strong>Before publishing:</strong> replace the contact-email placeholder in
+      <code>src/pages/account-deletion.astro</code>, and enter this page's URL in the
+      Play Console "Data deletion" field and the App Store privacy section.
+    </p>
+  )}
+
+  <p>
+    You can delete your account directly in the app: open <strong>Settings → Delete
+    account</strong>. This confirms with you, deletes your account and backend
+    metadata, and wipes on-device recordings, keys, and tokens.
+  </p>
+
+  <p>
+    To request deletion <strong>without the app</strong>, email
+    <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the address
+    associated with your account (or include the device/account ID shown in the
+    app's Settings) with the subject "Delete my account". We will verify the request
+    and complete deletion, normally within 30 days.
+  </p>
+
+  <h2>What gets deleted vs. retained</h2>
+  <table>
+    <thead>
+      <tr><th>Data</th><th>On deletion</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Account record, Supabase Auth user, auth/device tokens</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>Clip metadata held by the backend</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>On-device recordings, keys, tokens</td>
+        <td>Wiped from the device</td>
+      </tr>
+      <tr>
+        <td>Clips you backed up to <strong>your own</strong> storage (S3/Drive/OneDrive/iCloud)</td>
+        <td>You control these; delete them in that service</td>
+      </tr>
+      <tr>
+        <td>Minimal transaction logs required by law</td>
+        <td>Retained only as long as legally required, then deleted</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Target: complete deletion within 30 days of a verified request.</p>
+
+  <h2>Questions</h2>
+  <p>Contact <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+</Legal>
