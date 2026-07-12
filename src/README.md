@@ -6,9 +6,12 @@ JavaScript** (the only animation is inline SVG/CSS).
 
 ## Layout
 
-- `pages/` — one file per route. `index.astro` is the single-page homepage;
-  `privacy.astro` and `account-deletion.astro` are the legal pages required for
-  app-store approval.
+- `pages/` — file-based routes; each `.astro` file becomes a page.
+  `index.astro` is the single-page homepage (assembles the section components);
+  `privacy.astro` (`/privacy`) and `account-deletion.astro` (`/account-deletion`)
+  are the legal/compliance pages required for app-store approval, both rendered
+  in the `Legal` layout. Note: do **not** add a `README.md` (or any `.md`) inside
+  `pages/` — Astro would publish it as a live page.
 - `layouts/` — shared page shells. `Base.astro` renders the HTML document
   (`<head>`, meta/OG tags, font preload); `Legal.astro` wraps Base with a narrow,
   readable article column used by the legal pages.
