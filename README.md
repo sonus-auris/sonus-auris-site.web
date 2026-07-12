@@ -69,10 +69,13 @@ Each directory also has its own `README.md` describing what lives there.
 - GitHub links point to `github.com/sonus-auris/sonus-auris` — update if the
   org/repo name differs.
 - `astro.config.mjs` `site` — set to the real production domain.
-- `Partners.astro` — the footer "Trusted & recognised by" badges (Shazam Lite,
-  American Sleep Association, Music Production Collective, Pro Sound Alliance)
-  are **placeholders**. Several are real trademarks — secure written
-  partnership/permission before publishing, or replace with real endorsements.
+- `Partners.astro` — the footer row now shows **neutral capability badges**
+  (Sound matching, Sleep & snore, Music capture, Clear audio), NOT third-party
+  endorsements. Do not reintroduce real organisation/brand names without written
+  permission — that would imply an affiliation Sonus Auris does not have.
+- Legal pages (`privacy.astro`, `account-deletion.astro`) have placeholder
+  legal-entity name, contact email, and postal address to fill before store
+  submission; a visible "Before publishing" banner shows while placeholders remain.
 
 ## Theme
 
