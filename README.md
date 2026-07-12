@@ -36,7 +36,9 @@ npm run preview  # preview the production build
 
 ```
 src/
-  layouts/Base.astro        # <head>, fonts, OG tags
+  layouts/
+    Base.astro              # <head>, fonts, OG tags, <body> slot
+    Legal.astro             # readable article column for /privacy & deletion
   components/
     Nav.astro               # sticky header
     Hero.astro              # animated phone + waveform
@@ -46,12 +48,20 @@ src/
     Privacy.astro           # privacy-first promises + vault
     OpenSource.astro        # "read the code" + terminal
     Download.astro          # final CTA
-    Footer.astro
+    NoSpooks.astro          # tongue-in-cheek "no spooks" / warrant-canary band
+    Footer.astro            # link columns + Partners row
+    Partners.astro          # neutral capability badges (footer)
     StoreButtons.astro      # App Store + Google Play badges
     Logo.astro
-  pages/index.astro         # single-page assembly
-public/                     # favicon.svg, og.svg
+  pages/
+    index.astro             # single-page marketing assembly
+    privacy.astro           # /privacy — app-store privacy policy
+    account-deletion.astro  # /account-deletion — data-deletion page
+  styles/global.css         # design tokens, base styles, @font-face
+public/                     # favicon.svg, og.svg, fonts/, _headers
 ```
+
+Each directory also has its own `README.md` describing what lives there.
 
 ## Things to wire up before launch
 
