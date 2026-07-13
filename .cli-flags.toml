@@ -1,0 +1,22 @@
+# flags-2-env config for the Sonus Auris marketing/compliance site (Astro).
+#
+# The static build config (site/base) is fixed in astro.config.mjs; the only
+# runtime-ish surface is the dev server. Use the flags2env nodejs/bash client in
+# a dev wrapper to turn `--port=…` into env consumed by the dev script.
+[help]
+url = "https://github.com/sonus-auris/sonus-auris-site.web"
+columns = ["options", "env", "type", "default", "description"]
+
+[flags.port]
+env = "PORT"
+aliases = ["port"]
+short = "p"
+type = "integer"
+default = 4321
+help = "Astro dev server port."
+
+[flags.host]
+env = "HOST"
+aliases = ["host"]
+type = "string"
+help = "Astro dev server host/interface (e.g. 0.0.0.0 to expose on LAN)."
