@@ -1,12 +1,12 @@
 ---
 // Open-source section (#open-source). "Don't trust us — read the code" pitch
-// with the `points` list (public code, auditable encryption, reproducible
-// builds), a GitHub CTA, and a decorative fake terminal transcript.
-const GITHUB_URL = "https://github.com/sonus-auris/sonus-auris";
+// with the `points` list (public code, auditable encryption, source builds), a
+// GitHub CTA, and a decorative terminal transcript.
+const GITHUB_URL = "https://github.com/sonus-auris/sonus-auris-ui.dart";
 const points = [
   "Every line of the mobile app is public.",
   "Audit the on-device encryption yourself — or have your security friend do it.",
-  "Reproducible builds so the app you install matches the source.",
+  "Build and test the app yourself with standard Flutter tooling.",
   "Issues, PRs, and roadmap out in the open.",
 ];
 ---
@@ -45,13 +45,13 @@ const points = [
         <span></span><span></span><span></span>
         <em>sonus-auris — zsh</em>
       </div>
-      <pre><code><span class="c-dim">$</span> <span class="c-key">git</span> clone github.com/sonus-auris/sonus-auris
-<span class="c-dim">Cloning into 'sonus-auris'...</span>
+      <pre><code><span class="c-dim">$</span> <span class="c-key">git</span> clone https://github.com/sonus-auris/sonus-auris-ui.dart.git
+<span class="c-dim">Cloning into 'sonus-auris-ui.dart'...</span>
 
-<span class="c-dim">$</span> <span class="c-key">npm</span> run build:verify
-<span class="c-ok">✓</span> reproducible build matches release
-<span class="c-ok">✓</span> e2e encryption tests passed
-<span class="c-ok">✓</span> zero telemetry endpoints found
+<span class="c-dim">$</span> <span class="c-key">cd</span> sonus-auris-ui.dart
+<span class="c-dim">$</span> <span class="c-key">flutter</span> pub get
+<span class="c-dim">$</span> <span class="c-key">flutter</span> test
+<span class="c-ok">✓</span> Build and inspect the app from source
 
 <span class="c-dim">$</span> <span class="c-key">echo</span> "your audio, your keys, your code"
 <span class="c-amber">your audio, your keys, your code</span></code></pre>
