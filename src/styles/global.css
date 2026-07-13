@@ -1,14 +1,6 @@
 /* Self-hosted brand font — no third-party (Google Fonts) request, so no user
    IP is shared with Google and the CSP needs no external font/style origins.
    Baloo 2 is a variable font; one file covers weights 500–800. */
-@font-face {
-  font-family: "Baloo 2";
-  font-style: normal;
-  font-weight: 500 800;
-  font-display: swap;
-  src: url("/sonus-auris-site.web/fonts/baloo2.woff2") format("woff2");
-}
-
 :root {
   /* Brand palette — green + orange, fun but professional */
   --green-900: #0c3b2e;

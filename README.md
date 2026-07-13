@@ -25,6 +25,19 @@ npm install
 npm run dev      # http://localhost:4321
 ```
 
+[`flags-2-env`](https://github.com/ORESoftware/flags-2-env) can validate and
+override Astro's host, port, canonical site URL, and base path:
+
+```sh
+scripts/with-flags help
+scripts/with-flags audit
+scripts/with-flags --host=127.0.0.1 --port=4321 -- npm run dev
+scripts/with-flags --site=https://example.test --base=/preview -- npm run build
+```
+
+The wrapper builds the monorepo's pinned native source into a commit-keyed user
+cache, or uses `FLAGS2ENV_BIN` in a standalone checkout.
+
 ## Build
 
 ```bash
