@@ -18,6 +18,13 @@ const {
 // the GitHub Pages subpath. BASE_URL has no trailing slash, so add one.
 const base = import.meta.env.BASE_URL;
 const ogImage = new URL(`${base}/og.svg`, Astro.site);
+const fontFaceCss = `@font-face {
+  font-family: "Baloo 2";
+  font-style: normal;
+  font-weight: 500 800;
+  font-display: swap;
+  src: url("${base}/fonts/baloo2.woff2") format("woff2");
+}`;
 ---
 
 <!doctype html>
@@ -38,7 +45,7 @@ const ogImage = new URL(`${base}/og.svg`, Astro.site);
     <meta property="og:image" content={ogImage} />
     <meta name="theme-color" content="#1faa6c" />
 
-    <!-- Fun rounded brand font — self-hosted (see @font-face in global.css),
+    <!-- Fun rounded brand font — self-hosted under the configured base path,
          so no third-party request and a tighter CSP. -->
     <link
       rel="preload"
@@ -47,6 +54,7 @@ const ogImage = new URL(`${base}/og.svg`, Astro.site);
       type="font/woff2"
       crossorigin
     />
+    <style is:inline set:html={fontFaceCss}></style>
   </head>
   <body>
     <slot />

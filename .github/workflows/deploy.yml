@@ -6,11 +6,9 @@ on:
   # Allow manually re-running the deploy from the Actions tab.
   workflow_dispatch:
 
-# Grant the GITHUB_TOKEN the permissions the Pages deploy needs.
+# Default the GITHUB_TOKEN to read-only; each job asks for what it needs.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # Only one Pages deploy at a time; let an in-progress run finish.
 concurrency:
@@ -24,9 +22,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build with Astro
-        uses: withastro/action@v3
+        uses: withastro/action@v6
+        with:
+          node-version: 22
         # Reads astro.config.mjs (site + base) and uploads the build as the
-        # Pages artifact. Node version is auto-detected.
+        # Pages artifact using Astro 7's supported Node release line.
 
   deploy:
     needs: build
