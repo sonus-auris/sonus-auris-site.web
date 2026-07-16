@@ -1,16 +1,17 @@
 ---
 // Reusable App Store + Google Play badge row (used by Hero and Download).
-// `align` controls left vs. center alignment. Listing URLs are placeholders.
+// `align` controls left vs. center alignment. Until each listing URL is injected
+// at build time, render an honest non-clickable "Coming to" badge.
 interface Props {
   align?: "start" | "center";
 }
 const { align = "start" } = Astro.props;
-// Replace these with the live listing URLs once the app ships.
-const APPLE_URL = "https://apps.apple.com/app/sonus-auris";
-const GOOGLE_URL = "https://play.google.com/store/apps/details?id=app.sonusauris";
+const APPLE_URL = import.meta.env.PUBLIC_APP_STORE_URL?.trim();
+const GOOGLE_URL = import.meta.env.PUBLIC_PLAY_STORE_URL?.trim();
 ---
 
 <div class={`store-row ${align}`}>
+  {APPLE_URL ? (
   <a class="store-badge" href={APPLE_URL} rel="noopener noreferrer" aria-label="Download on the App Store">
     <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
       <path
@@ -20,7 +21,16 @@ const GOOGLE_URL = "https://play.google.com/store/apps/details?id=app.sonusauris
     </svg>
     <span><small>Download on the</small><strong>App Store</strong></span>
   </a>
+  ) : (
+  <span class="store-badge is-coming" aria-label="Coming soon to the App Store">
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+      <path fill="currentColor" d="M16.37 12.58c-.02-2.2 1.8-3.26 1.88-3.31-1.02-1.5-2.62-1.7-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.11 8.79.73 1.06 1.6 2.25 2.74 2.21 1.1-.05 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.08 2.65-2.15.84-1.23 1.18-2.42 1.2-2.48-.03-.01-2.3-.88-2.32-3.5zM14.2 6.1c.6-.74 1.01-1.76.9-2.78-.87.04-1.93.58-2.56 1.31-.56.65-1.05 1.69-.92 2.69.97.08 1.97-.49 2.58-1.22z"></path>
+    </svg>
+    <span><small>Coming to the</small><strong>App Store</strong></span>
+  </span>
+  )}
 
+  {GOOGLE_URL ? (
   <a class="store-badge" href={GOOGLE_URL} rel="noopener noreferrer" aria-label="Get it on Google Play">
     <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
       <path fill="#34c585" d="M3.6 2.3 13.4 12 3.6 21.7c-.36-.2-.6-.58-.6-1.05V3.35c0-.47.24-.85.6-1.05z"></path>
@@ -30,6 +40,17 @@ const GOOGLE_URL = "https://play.google.com/store/apps/details?id=app.sonusauris
     </svg>
     <span><small>Get it on</small><strong>Google Play</strong></span>
   </a>
+  ) : (
+  <span class="store-badge is-coming" aria-label="Coming soon to Google Play">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+      <path fill="#34c585" d="M3.6 2.3 13.4 12 3.6 21.7c-.36-.2-.6-.58-.6-1.05V3.35c0-.47.24-.85.6-1.05z"></path>
+      <path fill="#fd7e14" d="M17.3 8.2 14.9 12l2.4 3.8 3-1.7c.86-.5.86-1.7 0-2.2l-3-1.7z"></path>
+      <path fill="#1faa6c" d="M3.6 2.3c.18-.1.4-.13.65-.05L16 8.5l-1.6 3.5L3.6 2.3z"></path>
+      <path fill="#e8590c" d="M3.6 21.7 14.4 12 16 15.5 4.25 21.75c-.25.08-.47.05-.65-.05z"></path>
+    </svg>
+    <span><small>Coming to</small><strong>Google Play</strong></span>
+  </span>
+  )}
 </div>
 
 <style>
@@ -55,6 +76,14 @@ const GOOGLE_URL = "https://play.google.com/store/apps/details?id=app.sonusauris
   .store-badge:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+  }
+  .store-badge.is-coming {
+    cursor: default;
+    opacity: 0.88;
+  }
+  .store-badge.is-coming:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
   }
   .store-badge span {
     display: flex;

@@ -32,10 +32,10 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
   <h2>Summary</h2>
   <p>
     Sonus Auris records audio you choose to capture. Your recordings are
-    <strong>encrypted on your device</strong> and are <strong>only</strong> sent to
-    cloud storage <strong>you</strong> connect (your own S3 bucket, Google Drive,
-    OneDrive, or iCloud). We do <strong>not</strong> operate a shared media server
-    that stores your recordings, and we cannot read your encrypted clips.
+    <strong>encrypted on your device</strong> before they leave it. If you enable
+    backup, ciphertext can be sent to storage <strong>you</strong> connect (your own
+    S3 bucket, Google Drive, OneDrive, or iCloud) or to Sonus Auris backup storage.
+    We cannot decrypt your clips because their keys stay on your device.
   </p>
 
   <h2>What we collect and why</h2>
@@ -55,14 +55,17 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
     stay with your data; raw audio is not sent anywhere for analysis.
   </p>
   <p>
-    <strong>Account / backend data (only if you use the optional backend)</strong> —
-    a device or account identifier, authentication tokens, and metadata about clips
-    you choose to back up or share (timestamps, sizes, upload status). Purpose:
-    authentication, backup coordination, and optional alert/listening links you request.
+    <strong>Account / backend data (only if you use an account)</strong> — your
+    email address, a user and device identifier, authentication tokens, and metadata
+    about clips you choose to back up or share (timestamps, sizes, upload status).
+    Purpose: authentication, backup coordination, and optional alert/listening links.
   </p>
   <p>
-    <strong>Diagnostics</strong> — limited on-device logs to help the app run. We do
-    not include third-party advertising or analytics SDKs.
+    <strong>Diagnostics</strong> — after you sign in, sanitized app events, errors,
+    stack traces, platform, and app version can be sent to our Supabase project
+    under your user and device ID so we can operate and fix the app. Secret-shaped
+    fields are redacted; diagnostics do not contain recording audio. We do not
+    include third-party advertising or analytics SDKs.
   </p>
 
   <h2>What we do NOT do</h2>
@@ -81,17 +84,19 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
       bucket, Google Drive, OneDrive, or iCloud). Their handling is governed by their terms.
     </li>
     <li>
-      <strong>To the optional Sonus Auris backend</strong>, only for features you
-      invoke (authentication, backup coordination, alert links). Recordings remain
-      client-encrypted; the backend brokers transfers and short-lived links.
+      <strong>To Supabase and the optional Sonus Auris backend</strong>, only for
+      features you invoke (authentication, settings/consent sync, diagnostics,
+      backup coordination, encrypted backup, and alert links). Recordings remain
+      client-encrypted; the services cannot derive the device-held key.
     </li>
   </ul>
 
   <h2>Retention</h2>
   <p>
     Local clips age out automatically based on your rolling-window setting. Backed-up
-    clips persist in your chosen storage until you delete them. Backend metadata is
-    retained only as long as needed for the feature, and is removed on account deletion.
+    clips persist according to the retention settings for their destination or until
+    you delete them. Backend ciphertext and metadata are removed when their retention
+    expires or on account deletion, subject to limited legal retention.
   </p>
 
   <h2>Your choices and rights</h2>
