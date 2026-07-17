@@ -23,8 +23,9 @@ const NEEDS_FILL = CONTACT_EMAIL.startsWith("<");
 
   <p>
     You can delete your account directly in the app: open <strong>Settings → Delete
-    account</strong>. This confirms with you, deletes your account and backend
-    metadata, and wipes on-device recordings, keys, and tokens.
+    account</strong>. This confirms with you, deletes your account and Sonus Auris
+    backend data (including encrypted backups), and wipes on-device recordings,
+    keys, and tokens.
   </p>
 
   <p>
@@ -46,12 +47,12 @@ const NEEDS_FILL = CONTACT_EMAIL.startsWith("<");
         <td>Deleted</td>
       </tr>
       <tr>
-        <td>Clip metadata held by the backend</td>
+        <td>Clip metadata and encrypted backups held by Sonus Auris</td>
         <td>Deleted</td>
       </tr>
       <tr>
         <td>On-device recordings, keys, tokens</td>
-        <td>Wiped from the device</td>
+        <td>Wiped by in-app deletion; a web/email request cannot remotely erase a device</td>
       </tr>
       <tr>
         <td>Clips you backed up to <strong>your own</strong> storage (S3/Drive/OneDrive/iCloud)</td>

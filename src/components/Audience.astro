@@ -1,14 +1,15 @@
 ---
 // "Who it's for" section (#why). Renders a grid of audience cards from the
 // `audiences` data array — musicians, peace-of-mind/evidence, music lovers,
-// students & pros — each with a title, blurb, and bullet points.
+// students & pros, language learners, birders & naturalists — each with a
+// title, blurb, and bullet points.
 const audiences = [
   {
     emoji: "🎶",
     tag: "For musicians & creators",
     title: "Never lose the riff again",
     body: "Inspiration doesn't schedule itself. That hook you hummed in the shower, the jam that happened by accident, the melody you nailed once and never again — Sonus Auris has been rolling the whole time. Scrub back, clip it, and keep it forever.",
-    points: ["Rolling 24-hour buffer", "Tap to bookmark a moment", "Export clean clips to your DAW"],
+    points: ["Rolling 100-hour buffer", "Tap to bookmark a moment", "Export clean clips to your DAW"],
     accent: "green",
   },
   {
@@ -43,6 +44,30 @@ const audiences = [
     points: ["Automatic transcription", "Key-point & action-item summaries", "Jump from a note to the exact moment"],
     accent: "orange",
   },
+  {
+    emoji: "🗣️",
+    tag: "For language learners",
+    title: "Replay the conversation you only half-caught",
+    body: "Living the language is the best teacher — if only it slowed down. Sonus Auris keeps every real-world exchange, so you can scrub back to the sentence that lost you, read the transcript beside the audio, and mine the phrases people actually said to you. Then go further: pronunciation feedback, dictation practice, and synonym and phrasing suggestions turn your own conversations into your study material.",
+    points: [
+      "Transcript & audio side-by-side",
+      "Pronunciation feedback & dictation practice",
+      "Synonym & phrasing suggestions from real speech",
+    ],
+    accent: "green",
+  },
+  {
+    emoji: "🐦",
+    tag: "For birders, biologists & naturalists",
+    title: "Heard a call? Scrub back and ID it",
+    body: "The warbler never sings twice on request. With Sonus Auris rolling, that call you caught out of the corner of your ear is already recorded — scrub back, identify it, and clip it for your field notes. The same listening engine that names songs points itself at birdsong, with every clip timestamped and GPS-tagged for the record.",
+    points: [
+      "Rolling capture — the call is already saved",
+      "Bird call ID from your timeline",
+      "Timestamped, GPS-tagged clips for field notes",
+    ],
+    accent: "orange",
+  },
 ];
 ---
 
@@ -50,7 +75,7 @@ const audiences = [
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">🚗 Like a dashcam, for sound</span>
-      <h2>Four reasons people keep it running</h2>
+      <h2>Six reasons people keep it running</h2>
       <p>
         A dashcam doesn't decide which moments matter — it just never stops
         watching the road. Sonus Auris does the same for the audio of your life.
