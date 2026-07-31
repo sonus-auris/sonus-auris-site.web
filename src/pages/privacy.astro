@@ -1,18 +1,11 @@
 ---
 // /privacy — the app-store-required privacy policy, rendered in the Legal
 // layout. Explains what Sonus Auris collects, on-device encryption, and user
-// rights. Publisher/contact details below are placeholders to fill before launch.
+// rights.
+import { publisher } from "../data/publisher";
 import Legal from "../layouts/Legal.astro";
 
-// ---------------------------------------------------------------------------
-// FILL THESE IN BEFORE SUBMITTING TO THE STORES. The store consoles require a
-// real legal entity name and a monitored contact address on the hosted policy.
-const ENTITY = "<LEGAL ENTITY NAME>";
-const CONTACT_EMAIL = "<privacy@yourdomain>";
-const POSTAL = "<postal address>";
-const LAST_UPDATED = "2026-07-12";
-const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
-// ---------------------------------------------------------------------------
+const LAST_UPDATED = "2026-07-27";
 ---
 
 <Legal
@@ -20,22 +13,19 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
   description="How Sonus Auris handles your recordings and data. Privacy-first, end-to-end encrypted."
 >
   <h1>Sonus Auris — Privacy Policy</h1>
-  <p class="updated">Last updated: {LAST_UPDATED}. Publisher: {ENTITY}, contact: {CONTACT_EMAIL}.</p>
-
-  {NEEDS_FILL && (
-    <p class="todo">
-      <strong>Before publishing:</strong> replace the legal-entity name, contact
-      email, and postal address placeholders in <code>src/pages/privacy.astro</code>.
-    </p>
-  )}
+  <p class="updated">
+    Last updated: {LAST_UPDATED}. Publisher: {publisher.name}, contact:
+    <a href={`mailto:${publisher.contactEmail}`}>{publisher.contactEmail}</a>.
+  </p>
 
   <h2>Summary</h2>
   <p>
     Sonus Auris records audio you choose to capture. Your recordings are
     <strong>encrypted on your device</strong> before they leave it. If you enable
     backup, ciphertext can be sent to storage <strong>you</strong> connect (your own
-    S3 bucket, Google Drive, OneDrive, or iCloud) or to Sonus Auris backup storage.
-    We cannot decrypt your clips because their keys stay on your device.
+    S3-compatible bucket, Google Drive, OneDrive, Dropbox, or iCloud) or to Sonus
+    Auris backup storage. We cannot decrypt your clips because their keys stay on
+    your device.
   </p>
 
   <h2>What we collect and why</h2>
@@ -50,9 +40,12 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
     can prove where it was recorded. Purpose: app functionality you opt into.
   </p>
   <p>
-    <strong>Optional on-device audio analysis</strong> — OFF by default. Sleep/snore,
-    music, and loud-event detection run locally on your device. Detection results
-    stay with your data; raw audio is not sent anywhere for analysis.
+    <strong>Optional audio analysis</strong> — OFF by default. Core sleep/snore,
+    music-pattern, speech-pattern, and loud-event detectors run locally on your
+    device. If you separately enable and configure an external speech-to-text,
+    song-recognition, or similar service, the audio excerpt needed for that request
+    is sent to that provider under its terms. Sonus Auris shows that disclosure
+    before the feature is enabled; recognition is not required for recording.
   </p>
   <p>
     <strong>Account / backend data (only if you use an account)</strong> — your
@@ -73,15 +66,22 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
     <li>We do not sell your data.</li>
     <li>We do not use your data for advertising.</li>
     <li>We do not have access to the contents of your encrypted recordings.</li>
-    <li>We do not record without you starting capture.</li>
+    <li>We do not record unless you start capture or explicitly arm a recording schedule.</li>
   </ul>
 
   <h2>Where your data goes</h2>
   <ul>
     <li><strong>On your device</strong> by default (encrypted).</li>
     <li>
+      <strong>To a destination you explicitly choose for local export</strong>, such
+      as the system share sheet or a user-selected desktop file. That exported copy
+      is controlled by you, is outside Sonus Auris automatic retention, and must be
+      deleted or secured by you in the destination you selected.
+    </li>
+    <li>
       <strong>To storage you control</strong>, if you connect it (your S3-compatible
-      bucket, Google Drive, OneDrive, or iCloud). Their handling is governed by their terms.
+      bucket, Google Drive, OneDrive, Dropbox, or iCloud). Their handling is governed
+      by their terms.
     </li>
     <li>
       <strong>To Supabase and the optional Sonus Auris backend</strong>, only for
@@ -89,19 +89,39 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
       backup coordination, encrypted backup, and alert links). Recordings remain
       client-encrypted; the services cannot derive the device-held key.
     </li>
+    <li>
+      <strong>To an external recognition provider</strong>, only when you explicitly
+      enable and invoke a feature that needs it. The provider receives the bounded
+      audio excerpt required for that request; connected-storage encryption does
+      not apply to an excerpt deliberately sent for recognition.
+    </li>
   </ul>
 
   <h2>Retention</h2>
   <p>
-    Local clips age out automatically based on your rolling-window setting. Backed-up
-    clips persist according to the retention settings for their destination or until
-    you delete them. Backend ciphertext and metadata are removed when their retention
-    expires or on account deletion, subject to limited legal retention.
+    App-private local plaintext clips age out automatically based on your rolling-window
+    setting and never later than the approved 100-hour ceiling; you may choose a shorter
+    window. Backup failure, offline operation, disabled backup, or retrying a transfer
+    does not extend that deadline. Backed-up clips persist according to the retention
+    settings for their destination or until you delete them. Backend ciphertext and
+    metadata are removed when their retention expires or on account deletion, subject
+    to limited legal retention.
+  </p>
+  <p>
+    When you deliberately export a local copy, the new copy lives outside Sonus Auris
+    app-private storage and automatic retention. Exporting does not delay deletion of
+    the app-private copy. You are responsible for securing and deleting the exported
+    copy from the destination you selected.
   </p>
 
   <h2>Your choices and rights</h2>
   <ul>
     <li>Start/stop recording at any time; delete any clip in the app.</li>
+    <li>Choose a local retention window of 100 hours or less.</li>
+    <li>
+      Export an explicit user-controlled local copy without extending the app-private
+      deletion deadline.
+    </li>
     <li>Turn location, analysis, and backup on or off at any time.</li>
     <li>
       <strong>Delete your account and associated data</strong> — see
@@ -135,5 +155,9 @@ const NEEDS_FILL = ENTITY.startsWith("<") || CONTACT_EMAIL.startsWith("<");
   <p>We will update this policy as the app evolves and revise the "Last updated" date.</p>
 
   <h2>Contact</h2>
-  <p>{ENTITY}, {POSTAL}, {CONTACT_EMAIL}.</p>
+  <address>
+    {publisher.name}<br />
+    {publisher.postalAddress}<br />
+    <a href={`mailto:${publisher.contactEmail}`}>{publisher.contactEmail}</a>
+  </address>
 </Legal>
