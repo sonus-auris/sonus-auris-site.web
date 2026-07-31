@@ -68,7 +68,16 @@ must upload immutable, versioned objects first, then replace the `/latest`
 aliases with `Cache-Control: no-store`. Large binaries go directly from the R2
 custom domain to the user; the Rust server may expose release metadata or issue
 redirects, but it must not become a bandwidth proxy for public installers.
->>>>>>> origin/main
+
+### Desktop alpha builds
+
+Separate from the stable per-OS installers above, `DesktopDownloads.astro`
+gates the pre-release desktop clients, split by runtime. Set
+`PUBLIC_RUST_DESKTOP_DOWNLOAD_BASE_URL` and
+`PUBLIC_FLUTTER_DESKTOP_DOWNLOAD_BASE_URL` to the stable R2 alpha prefixes, or
+`PUBLIC_DESKTOP_TESTERS_URL` to a restricted Google Drive folder while R2 is
+being activated. If none is set, the site shows an honest non-clickable
+“Downloads opening soon” state rather than a dead link.
 
 ## Structure
 
