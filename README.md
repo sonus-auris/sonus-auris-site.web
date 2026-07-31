@@ -45,14 +45,6 @@ npm run build    # outputs to ./dist
 npm run preview  # preview the production build
 ```
 
-<<<<<<< HEAD
-Desktop alpha buttons are enabled at build time. Use
-`PUBLIC_RUST_DESKTOP_DOWNLOAD_BASE_URL` and
-`PUBLIC_FLUTTER_DESKTOP_DOWNLOAD_BASE_URL` for the stable R2 alpha prefixes, or
-`PUBLIC_DESKTOP_TESTERS_URL` for a restricted
-Google Drive folder while R2 is being activated. If neither is set, the site
-shows an honest non-clickable “Downloads opening soon” state.
-=======
 ## Release links
 
 The site is static and never proxies installer bytes. Mobile store URLs and
