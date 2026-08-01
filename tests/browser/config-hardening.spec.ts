@@ -147,15 +147,18 @@ test.describe("hostile deployment configuration", () => {
   test("falls back to the non-linked 'coming soon' state", async ({ page }) => {
     await page.goto("/");
 
-    // Store badges: rendered as inert <span>, never as an anchor.
-    await expect(
-      page.locator("span.store-badge.is-coming").filter({ hasText: "App Store" }),
-    ).toBeVisible();
-    await expect(
-      page
+    // Store badges: rendered as inert <span>, never as an anchor. They appear
+    // in both the hero and the download section, so assert every instance.
+    for (const store of ["App Store", "Google Play"]) {
+      const badges = page
         .locator("span.store-badge.is-coming")
-        .filter({ hasText: "Google Play" }),
-    ).toBeVisible();
+        .filter({ hasText: store });
+      const count = await badges.count();
+      expect(count, `no inert ${store} badge rendered`).toBeGreaterThan(0);
+      for (let index = 0; index < count; index += 1) {
+        await expect(badges.nth(index)).toBeVisible();
+      }
+    }
     await expect(page.locator("a.store-badge")).toHaveCount(0);
 
     // Desktop installers: no links, no checksum links, and the placeholder
