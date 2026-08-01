@@ -59,6 +59,10 @@ const fontFaceCss = `@font-face {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {enforceMetaCsp && (
+      <meta http-equiv="Content-Security-Policy" content={contentSecurityPolicy} />
+    )}
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <meta name="generator" content={Astro.generator} />
 
