@@ -49,11 +49,13 @@ for (const route of ROUTES) {
           // In-page anchors are the primary navigation on the homepage; a
           // missing target silently does nothing when clicked.
           const id = decodeURIComponent(url.hash.slice(1));
-          const samePage =
-            url.pathname === new URL(page.url()).pathname;
+          const samePage = url.pathname === new URL(page.url()).pathname;
           if (samePage) {
-            const target = page.locator(`#${CSS.escape(id)}`);
-            if ((await target.count()) === 0) {
+            const exists = await page.evaluate(
+              (elementId) => document.getElementById(elementId) !== null,
+              id,
+            );
+            if (!exists) {
               broken.push(`${anchor.href} (no element with id "${id}")`);
             }
             continue;
