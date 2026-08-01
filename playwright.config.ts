@@ -3,7 +3,11 @@ import { defineConfig, devices } from "@playwright/test";
 // Browser tests run against the real production build served by `astro preview`
 // — the same static output that is uploaded to GitHub Pages — not the dev
 // server, so the production-only `<meta>` CSP and the built CSS are exercised.
-const PORT = Number(process.env.SONUS_AURIS_SITE_PORT ?? 4321);
+// A dedicated port, not Astro's default 4321: any other dev server on the
+// machine may already hold 4321, and `reuseExistingServer` would then silently
+// point the whole suite at somebody else's site. For the same reason the server
+// is never reused — if the port is busy, `astro preview` fails loudly instead.
+const PORT = Number(process.env.SONUS_AURIS_E2E_PORT ?? 4327);
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 // Deployment-configured URLs are fixtures, not real endpoints: the suite must
