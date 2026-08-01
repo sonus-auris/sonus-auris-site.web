@@ -47,6 +47,10 @@ const CONTENT_TYPES: Record<string, string> = {
 let server: Server | undefined;
 
 test.describe("hostile deployment configuration", () => {
+  // Serial: these tests share one build and one server, so they must not be
+  // split across workers (which would run the build concurrently into the same
+  // directory and race).
+  test.describe.configure({ mode: "serial" });
   test.use({ baseURL: ORIGIN });
 
   test.beforeAll(async () => {
