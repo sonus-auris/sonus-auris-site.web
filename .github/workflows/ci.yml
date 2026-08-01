@@ -1,7 +1,8 @@
 name: CI
 
-# Build and static store-compliance checks. This workflow never deploys and
-# never uploads a Pages artifact.
+# Build, static store-compliance checks, and real-browser tests against the
+# production build. This workflow never deploys and never uploads a Pages
+# artifact.
 on:
   pull_request:
     branches: [main]
