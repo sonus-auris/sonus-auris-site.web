@@ -22,7 +22,7 @@ test("the covered route list matches every page the build emits", () => {
     .filter((path) => path.endsWith(".html"))
     .map(
       (path) =>
-        `/${relative(dist, path).split(sep).join("/").replace(/(?:^|)index\.html$/, "")}`,
+        `/${relative(dist, path).split(sep).join("/").replace(/index\.html$/, "")}`,
     )
     .sort();
 
