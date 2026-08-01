@@ -86,13 +86,15 @@ for (const route of ROUTES) {
         return url.protocol.startsWith("http") && url.origin !== origin;
       });
 
-      // The homepage links GitHub and the configured download host; the legal
-      // pages link GitHub. If this ever matches nothing the assertions below
-      // would be vacuous, so require at least one.
-      expect(
-        external.length,
-        `${route} rendered no external links to check`,
-      ).toBeGreaterThan(0);
+      // /privacy/ and /account-deletion/ deliberately link nowhere off-origin
+      // (mailto only), but the homepage and /support/ must, or the assertions
+      // below would be silently vacuous.
+      if (route === "/" || route === "/support/") {
+        expect(
+          external.length,
+          `${route} rendered no external links to check`,
+        ).toBeGreaterThan(0);
+      }
 
       const violations: string[] = [];
       for (const anchor of external) {
