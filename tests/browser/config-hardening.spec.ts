@@ -23,7 +23,9 @@ import { expect, test } from "./fixtures";
 
 const PORT = Number(process.env.SONUS_AURIS_HOSTILE_PORT ?? 4399);
 const ORIGIN = `http://127.0.0.1:${PORT}`;
-const OUT_DIR = resolve("test-results", "hostile-config-build");
+// Deliberately outside Playwright's `outputDir`, which is wiped and repopulated
+// while the run is in progress.
+const OUT_DIR = resolve(".playwright-hostile-build");
 
 const HOSTILE_ENV = {
   PUBLIC_APP_STORE_URL: "javascript:alert(document.domain)",
