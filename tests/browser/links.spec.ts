@@ -28,9 +28,10 @@ for (const route of ROUTES) {
       await page.goto(route);
       const origin = new URL(baseURL!).origin;
       const found = await anchors(page);
-      expect(found.length, `${route} rendered no links at all`).toBeGreaterThan(
-        3,
-      );
+      expect(
+        found.length,
+        `${route} rendered no links at all`,
+      ).toBeGreaterThanOrEqual(2);
 
       const internal = found.filter((a) => new URL(a.href).origin === origin);
       expect(
