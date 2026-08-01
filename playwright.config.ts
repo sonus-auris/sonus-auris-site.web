@@ -55,10 +55,14 @@ export default defineConfig({
   webServer: {
     command: "npm run build && npm run preview",
     url: BASE_URL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
     stdout: "pipe",
     stderr: "pipe",
-    env: { ...downloadFixtureEnv },
+    env: {
+      ...downloadFixtureEnv,
+      // Read by astro.config.mjs for both `build` and `preview`.
+      SONUS_AURIS_SITE_PORT: String(PORT),
+    },
   },
 });
