@@ -85,13 +85,18 @@ const releaseGroups = [
       </div>
       <div class="desktop-actions">
         {group.files.map((download) => (
-          <a class="desktop-button" href={`${group.base}/${download.file}`} download>
+          <a
+            class="desktop-button"
+            href={`${group.base}/${download.file}`}
+            rel="noopener noreferrer"
+            download
+          >
             <span>{download.label}</span>
             <small>{download.detail}</small>
           </a>
         ))}
       </div>
-      <a class="checksum-link" href={`${group.base}/SHA256SUMS`}>
+      <a class="checksum-link" href={`${group.base}/SHA256SUMS`} rel="noopener noreferrer">
         Verify {group.name.toLowerCase()} checksums
       </a>
     </section>
