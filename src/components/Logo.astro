@@ -9,6 +9,11 @@ const { size = 34, light = false } = Astro.props;
 const word = light ? "#fffdf8" : "#0c2a22";
 const sub = light ? "rgba(255,253,248,0.75)" : "#355a4f";
 const homeHref = `${import.meta.env.BASE_URL.replace(/\/+$/, "")}/`;
+
+// The logo renders more than once per page (nav + footer), so the gradient
+// needs a per-instance id: duplicate DOM ids are invalid HTML and the second
+// `url(#…)` reference resolves to whichever element came first.
+const gradientId = `logo-g-${(globalThis as { __sonusAurisLogoCount?: number }).__sonusAurisLogoCount = ((globalThis as { __sonusAurisLogoCount?: number }).__sonusAurisLogoCount ?? 0) + 1}`;
 ---
 
 <a href={homeHref} class="logo" aria-label="Sonus Auris home">
