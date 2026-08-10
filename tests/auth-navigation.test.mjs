@@ -1,0 +1,26 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+const navSource = await readFile(
+  new URL("../src/components/Nav.astro", import.meta.url),
+  "utf8",
+);
+
+test("marketing account actions terminate at the Sonus Auris Rust web server", () => {
+  assert.match(navSource, /const APP_ORIGIN = "https:\/\/user\.sonusauris\.app";/);
+  assert.match(navSource, /const LOGIN_URL = `\$\{APP_ORIGIN\}\/login`;/);
+  assert.match(navSource, /const SIGNUP_URL = `\$\{APP_ORIGIN\}\/signup`;/);
+  assert.match(navSource, /const DASHBOARD_URL = `\$\{APP_ORIGIN\}\/dashboard`;/);
+
+  for (const action of ["login", "signup", "dashboard"]) {
+    assert.match(navSource, new RegExp(`data-account-action="${action}"`));
+  }
+  assert.match(navSource, /role="group" aria-label="Account"/);
+});
+
+test("the static marketing header contains no browser-side auth credentials", () => {
+  assert.doesNotMatch(navSource, /SUPABASE_(?:SECRET|SERVICE_ROLE|ANON|PUBLISHABLE)_KEY/);
+  assert.doesNotMatch(navSource, /AUTH_BROWSER_.*SECRET/);
+  assert.doesNotMatch(navSource, /Bearer\s+[A-Za-z0-9._~-]+/);
+});
