@@ -12,8 +12,9 @@ import { expect, test } from "./fixtures";
  * variables, not from page source. Before hardening, whatever string those
  * variables held was written straight into an `href` — so a mistyped or hostile
  * value (`javascript:…`, plain `http://`) became an active or mixed-content URL
- * on a site that otherwise ships zero JavaScript, and `npm run check` never saw
- * it because CI builds without those variables set.
+ * on a site whose only JavaScript is now the narrow, self-hosted account-state
+ * client. `npm run check` never saw the hostile values because CI builds without
+ * those variables set.
  *
  * `src/lib/external-url.ts` now requires an absolute https URL. This test
  * rebuilds the whole site with deliberately hostile values, serves that build,
@@ -39,6 +40,7 @@ const HOSTILE_ENV = {
 const CONTENT_TYPES: Record<string, string> = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
   ".woff2": "font/woff2",
@@ -175,14 +177,17 @@ test.describe("hostile deployment configuration", () => {
     page,
   }) => {
     // A hardened build must degrade, not break: the marketing copy, the CSP,
-    // and the compliance links all have to survive the bad configuration.
+    // account-state client, and compliance links all have to survive bad config.
     await page.goto("/");
 
     await expect(page.locator("h1")).toBeVisible();
     await expect(
       page.locator('head meta[http-equiv="Content-Security-Policy"]'),
     ).toHaveCount(1);
-    await expect(page.locator("script")).toHaveCount(0);
+    await expect(
+      page.locator('script[type="module"][src="/account-session.js"]'),
+    ).toHaveCount(1);
+    await expect(page.locator("script:not([src])")).toHaveCount(0);
     await expect(
       page.locator("footer.footer").getByRole("link", {
         name: "Privacy policy",

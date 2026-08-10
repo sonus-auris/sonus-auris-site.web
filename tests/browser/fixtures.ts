@@ -23,21 +23,38 @@ export const PAGE_TITLES: Record<Route, string> = {
 
 export const MOBILE_VIEWPORT = { width: 390, height: 844 };
 export const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
+export const ACCOUNT_ORIGIN = "https://user.sonusauris.app";
+const SESSION_PREFIX = `${ACCOUNT_ORIGIN}/auth/session/`;
 
 /**
  * Auto-applied fixture that fails any test whose page logged a console error,
- * threw an uncaught exception, failed a request, or reached off-origin.
- *
- * The last one is the point of the exercise as much as the first three: this
- * site is meant to ship zero third-party resources (self-hosted font, inline
- * SVG, no analytics), and a `<meta>` CSP of `default-src 'self'` only stays
- * true if nothing ever tries to leave the origin.
+ * threw an uncaught exception, failed a request, or reached an unapproved
+ * origin. The sole cross-origin allowance is the token-blind session status /
+ * refresh contract on the Rust customer web server. It is stubbed anonymous by
+ * default so the public-site suite is deterministic and never reaches a live
+ * account service.
  */
 export const test = base.extend<{ pageProblems: string[] }>({
   pageProblems: [
     async ({ page, baseURL }, use) => {
       const problems: string[] = [];
       const origin = new URL(baseURL ?? "http://127.0.0.1:4321").origin;
+
+      await page.route(`${ACCOUNT_ORIGIN}/auth/session/**`, async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          headers: {
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Credentials": "true",
+            "Cache-Control": "no-store",
+          },
+          body: JSON.stringify({
+            authenticated: false,
+            refreshAfterSeconds: 3000,
+          }),
+        });
+      });
 
       page.on("console", (message) => {
         if (message.type() === "error") {
@@ -55,16 +72,16 @@ export const test = base.extend<{ pageProblems: string[] }>({
       page.on("request", (request) => {
         const url = request.url();
         if (!url.startsWith("http")) return;
-        if (new URL(url).origin !== origin) {
-          problems.push(`off-origin request: ${url}`);
-        }
+        if (new URL(url).origin === origin) return;
+        if (url.startsWith(SESSION_PREFIX)) return;
+        problems.push(`off-origin request: ${url}`);
       });
 
       await use(problems);
 
       expect(
         problems,
-        "page logged errors, failed requests, or requested a third-party origin",
+        "page logged errors, failed requests, or requested an unapproved origin",
       ).toEqual([]);
     },
     { auto: true },

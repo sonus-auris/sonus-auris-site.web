@@ -18,8 +18,11 @@ const {
 // at the production root and on preview subpaths. Astro's root base is `/`,
 // so normalize trailing slashes before appending an asset path.
 const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+const siteBase = base || "/";
 const ogImage = new URL(`${base}/og.svg`, Astro.site);
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const accountOrigin = "https://user.sonusauris.app";
+const accountSessionScript = `${base}/account-session.js`;
 
 // GitHub Pages ignores `public/_headers`, so enforce the active-content policy
 // browsers support in markup. Header-only controls such as HSTS,
@@ -27,22 +30,24 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 // in `_headers` for a future CDN/origin migration and must not be represented as
 // active response headers today.
 //
-// The generated site intentionally has no client JavaScript, remote connections,
-// frames, workers, plugins, or document base override. Keep this policy aligned
-// with `public/_headers`, `tests/security-metadata.test.mjs`, and the independent
-// deployed-runtime browser gates in sonus-auris-e2e.
+// The only client-side capability is the self-hosted, token-blind account-state
+// client and its service worker. It may connect only to the exact Rust customer
+// web-server origin; it never receives or stores a JWT or refresh credential.
+// Keep this policy aligned with `public/_headers`,
+// `tests/security-metadata.test.mjs`, and the independent deployed-runtime
+// browser gates in sonus-auris-e2e.
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'none'",
   "object-src 'none'",
-  "script-src 'none'",
+  "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self'",
   "img-src 'self' data:",
   "media-src 'self' blob:",
-  "connect-src 'none'",
+  `connect-src ${accountOrigin}`,
   "frame-src 'none'",
-  "worker-src 'none'",
+  "worker-src 'self'",
   "manifest-src 'self'",
   "form-action 'self'",
   "upgrade-insecure-requests",
@@ -59,7 +64,11 @@ const fontFaceCss = `@font-face {
 ---
 
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  data-account-origin={accountOrigin}
+  data-site-base={siteBase}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -93,6 +102,7 @@ const fontFaceCss = `@font-face {
       crossorigin
     />
     <style is:inline set:html={fontFaceCss}></style>
+    <script is:inline type="module" src={accountSessionScript}></script>
   </head>
   <body>
     <slot />
