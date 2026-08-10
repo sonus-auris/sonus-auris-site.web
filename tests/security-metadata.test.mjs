@@ -5,18 +5,19 @@ import { test } from 'node:test';
 
 const dist = path.resolve('dist');
 const productionOrigin = 'https://sonusauris.app';
+const accountOrigin = 'https://user.sonusauris.app';
 const enforcedDirectives = new Map([
   ['default-src', ["'self'"]],
   ['base-uri', ["'none'"]],
   ['object-src', ["'none'"]],
-  ['script-src', ["'none'"]],
+  ['script-src', ["'self'"]],
   ['style-src', ["'self'", "'unsafe-inline'"]],
   ['font-src', ["'self'"]],
   ['img-src', ["'self'", 'data:']],
   ['media-src', ["'self'", 'blob:']],
-  ['connect-src', ["'none'"]],
+  ['connect-src', [accountOrigin]],
   ['frame-src', ["'none'"]],
-  ['worker-src', ["'none'"]],
+  ['worker-src', ["'self'"]],
   ['manifest-src', ["'self'"]],
   ['form-action', ["'self'"]],
   ['upgrade-insecure-requests', []],
@@ -79,7 +80,7 @@ function assertPolicy(actual, expected, label) {
   }
 }
 
-test('every generated page enforces the no-script, no-connect static-site contract', () => {
+test('every generated page permits only the narrow self-hosted session client contract', () => {
   const htmlFiles = walk(dist).filter((file) => file.endsWith('.html'));
   assert.ok(htmlFiles.length >= 4, `expected at least four HTML pages, found ${htmlFiles.length}`);
 
@@ -89,10 +90,19 @@ test('every generated page enforces the no-script, no-connect static-site contra
     const encodedCsp = metaContent(html, 'http-equiv', 'Content-Security-Policy');
     assert.ok(encodedCsp, `${relative}: missing Content-Security-Policy meta element`);
     assertPolicy(directives(decodeAttribute(encodedCsp)), enforcedDirectives, relative);
+
+    const scripts = [...html.matchAll(/<script\b[^>]*><\/script>/gi)].map((match) => match[0]);
+    assert.equal(scripts.length, 1, `${relative}: expected one external session client`);
+    assert.equal(attribute(scripts[0], 'type'), 'module', `${relative}: session client is not a module`);
+    assert.equal(
+      attribute(scripts[0], 'src'),
+      '/account-session.js',
+      `${relative}: unexpected script source`,
+    );
     assert.doesNotMatch(
       html,
-      /<script\b/i,
-      `${relative}: script-src is none but a script element was generated`,
+      /<script\b(?![^>]*\bsrc=)[^>]*>/i,
+      `${relative}: inline scripts are forbidden`,
     );
 
     assert.equal(
@@ -105,6 +115,12 @@ test('every generated page enforces the no-script, no-connect static-site contra
       'index,follow,max-image-preview:large',
       `${relative}: robots meta drifted`,
     );
+  }
+
+  for (const asset of ['account-session.js', 'account-session-sw.js']) {
+    const source = read(asset);
+    assert.match(source, /credentials:\s*["']include["']/);
+    assert.doesNotMatch(source, /localStorage|sessionStorage|access_token|refresh_token/);
   }
 });
 

@@ -2,6 +2,7 @@ import { readdirSync, statSync } from "node:fs";
 import { relative, resolve, sep } from "node:path";
 
 import {
+  ACCOUNT_ORIGIN,
   DESKTOP_VIEWPORT,
   MOBILE_VIEWPORT,
   PAGE_TITLES,
@@ -63,7 +64,7 @@ for (const route of ROUTES) {
       expect((await h1.innerText()).trim().length).toBeGreaterThan(0);
     });
 
-    test("enforces the static-host content security policy in the markup", async ({
+    test("enforces the narrow session-client content security policy", async ({
       page,
     }) => {
       await page.goto(route);
@@ -77,7 +78,9 @@ for (const route of ROUTES) {
       const policy = (await csp.getAttribute("content")) ?? "";
       for (const directive of [
         "default-src 'self'",
-        "script-src 'none'",
+        "script-src 'self'",
+        `connect-src ${ACCOUNT_ORIGIN}`,
+        "worker-src 'self'",
         "object-src 'none'",
         "base-uri 'none'",
         "form-action 'self'",
@@ -93,9 +96,13 @@ for (const route of ROUTES) {
         "strict-origin-when-cross-origin",
       );
 
-      // The policy above is only honest if the page really has no scripts or
-      // document-wide base URL override.
-      await expect(page.locator("script")).toHaveCount(0);
+      // The policy above is only honest if the sole executable is the
+      // self-hosted account-state module and there is no document-wide base URL
+      // override or inline script body.
+      await expect(
+        page.locator('script[type="module"][src="/account-session.js"]'),
+      ).toHaveCount(1);
+      await expect(page.locator("script:not([src])")).toHaveCount(0);
       await expect(page.locator("base")).toHaveCount(0);
     });
 
