@@ -20,7 +20,7 @@ const DASHBOARD_URL = `${APP_ORIGIN}/dashboard`;
       <a href="#open-source">Open source</a>
       <a href="#download">Download</a>
     </nav>
-    <div class="nav-cta" role="group" aria-label="Account">
+    <div class="nav-cta">
       <a class="gh" href={GITHUB_URL} rel="noopener noreferrer" aria-label="View source on GitHub">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path
@@ -30,11 +30,27 @@ const DASHBOARD_URL = `${APP_ORIGIN}/dashboard`;
         </svg>
         <span>GitHub</span>
       </a>
-      <a class="account-link" href={LOGIN_URL} data-account-action="login">Log in</a>
-      <a class="btn btn-secondary btn-sm" href={SIGNUP_URL} data-account-action="signup">Sign up</a>
-      <a class="btn btn-primary btn-sm" href={DASHBOARD_URL} data-account-action="dashboard">
-        Dashboard
-      </a>
+      <a class="download-action" href="#download">Get the app</a>
+      <div class="account-actions" role="group" aria-label="Account">
+        <a
+          class="account-link"
+          href={LOGIN_URL}
+          rel="noopener noreferrer"
+          data-account-action="login"
+        >Log in</a>
+        <a
+          class="btn btn-secondary btn-sm"
+          href={SIGNUP_URL}
+          rel="noopener noreferrer"
+          data-account-action="signup"
+        >Sign up</a>
+        <a
+          class="btn btn-primary btn-sm"
+          href={DASHBOARD_URL}
+          rel="noopener noreferrer"
+          data-account-action="dashboard"
+        >Dashboard</a>
+      </div>
     </div>
   </div>
 </header>
@@ -67,12 +83,16 @@ const DASHBOARD_URL = `${APP_ORIGIN}/dashboard`;
   .nav-links a:hover {
     color: var(--green-700);
   }
-  .nav-cta {
+  .nav-cta,
+  .account-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 8px;
     min-width: 0;
+  }
+  .nav-cta {
+    flex-wrap: wrap;
   }
   .gh {
     display: none;
@@ -82,15 +102,20 @@ const DASHBOARD_URL = `${APP_ORIGIN}/dashboard`;
     color: var(--green-900);
   }
   .gh:hover,
-  .account-link:hover {
+  .account-link:hover,
+  .download-action:hover {
     color: var(--green-700);
   }
+  .download-action,
   .account-link {
     padding: 9px 8px;
     color: var(--green-900);
     font-size: 0.9rem;
     font-weight: 800;
     white-space: nowrap;
+  }
+  .download-action {
+    display: none;
   }
   .btn-sm {
     padding: 9px 14px;
@@ -121,10 +146,33 @@ const DASHBOARD_URL = `${APP_ORIGIN}/dashboard`;
     .nav-cta {
       width: 100%;
     }
+    .download-action {
+      display: inline-flex;
+    }
+  }
+  @media (max-width: 430px) {
+    .nav-cta,
+    .account-actions {
+      gap: 5px;
+    }
+    .download-action,
+    .account-link,
+    .btn-sm {
+      padding: 8px 7px;
+      font-size: 0.78rem;
+    }
+  }
+  @media (min-width: 681px) {
+    .download-action {
+      display: inline-flex;
+    }
   }
   @media (min-width: 860px) {
     .nav-links {
       display: inline-flex;
+    }
+    .download-action {
+      display: none;
     }
   }
   @media (min-width: 1120px) {
