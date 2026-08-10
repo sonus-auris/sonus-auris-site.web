@@ -22,7 +22,6 @@ const siteBase = base || "/";
 const ogImage = new URL(`${base}/og.svg`, Astro.site);
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const accountOrigin = "https://user.sonusauris.app";
-const accountSessionScript = `${base}/account-session.js`;
 
 // GitHub Pages ignores `public/_headers`, so enforce the active-content policy
 // browsers support in markup. Header-only controls such as HSTS,
@@ -102,7 +101,10 @@ const fontFaceCss = `@font-face {
       crossorigin
     />
     <style is:inline set:html={fontFaceCss}></style>
-    <script is:inline type="module" src={accountSessionScript}></script>
+    <!-- The custom domain is deployed at the origin root. Keep this literal so
+         Astro emits a real external module script rather than transforming a
+         dynamic `src` into an inline script that the CSP would reject. -->
+    <script type="module" src="/account-session.js"></script>
   </head>
   <body>
     <slot />
