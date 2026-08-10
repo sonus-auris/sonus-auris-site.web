@@ -19,6 +19,12 @@ test("marketing account actions terminate at the Sonus Auris Rust web server", (
   assert.match(navSource, /role="group" aria-label="Account"/);
 });
 
+test("account navigation preserves download access and isolates every off-origin link", () => {
+  assert.match(navSource, /class="download-action" href="#download">Get the app<\/a>/);
+  const isolatedExternalLinks = navSource.match(/rel="noopener noreferrer"/g) ?? [];
+  assert.equal(isolatedExternalLinks.length, 4);
+});
+
 test("the static marketing header contains no browser-side auth credentials", () => {
   assert.doesNotMatch(navSource, /SUPABASE_(?:SECRET|SERVICE_ROLE|ANON|PUBLISHABLE)_KEY/);
   assert.doesNotMatch(navSource, /AUTH_BROWSER_.*SECRET/);
