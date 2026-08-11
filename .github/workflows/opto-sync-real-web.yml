@@ -18,6 +18,7 @@ permissions:
 
 jobs:
   real-web:
-    uses: opto-sync/opto-sync-e2e/.github/workflows/real-web-app-reusable.yml@a8e4a5cb1fc67ddc1e415d910b18aa99056b2321
+    uses: opto-sync/opto-sync-e2e/.github/workflows/real-web-app-reusable.yml@c8e03dda14251be2125afb01cfa2e219152d4c15
     with:
       expect_offline_shell: false
+      mock_api_origin: 'https://user.sonusauris.app'
