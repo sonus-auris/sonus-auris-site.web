@@ -18,6 +18,6 @@ permissions:
 
 jobs:
   real-web:
-    uses: opto-sync/opto-sync-e2e/.github/workflows/real-web-app-reusable.yml@6dd42f988efedf74359c8fc1d0f7a1da82c1fdbd
+    uses: opto-sync/opto-sync-e2e/.github/workflows/real-web-app-reusable.yml@a8e4a5cb1fc67ddc1e415d910b18aa99056b2321
     with:
       expect_offline_shell: false
