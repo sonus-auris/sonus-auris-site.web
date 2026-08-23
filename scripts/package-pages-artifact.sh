@@ -7,7 +7,6 @@ evidence_dir="${3:-artifacts/pages-evidence}"
 
 node scripts/pages-artifact-evidence.mjs --root "$root" --out "$evidence_dir"
 mkdir -p "$(dirname "$output")"
-rm -f "$output"
 
 # A deterministic archive binds the Pages upload to the exact tree that passed
 # source and generated-output checks. We package it ourselves because the
@@ -18,17 +17,10 @@ rm -f "$output"
 # leaving tar's default behavior intact means a path swapped to a symlink during
 # packaging is archived as a symlink and then rejected by the round-trip
 # inventory instead of reading bytes outside the verified tree.
-LC_ALL=C tar \
-  --format=ustar \
-  --sort=name \
-  --mtime="@${SOURCE_DATE_EPOCH:-0}" \
-  --owner=0 \
-  --group=0 \
-  --numeric-owner \
-  --mode='u+rwX,go+rX,go-w' \
-  -cf "$output" \
-  -C "$root" \
-  .
+python3 scripts/create-deterministic-tar.py \
+  "$root" \
+  "$output" \
+  "${SOURCE_DATE_EPOCH:-0}"
 
 entries_file="$evidence_dir/pages-archive-entries.txt"
 LC_ALL=C tar -tf "$output" | LC_ALL=C sort > "$entries_file"
@@ -48,7 +40,7 @@ done
 # inventoried. This catches omitted dot-directories, path races, and any other
 # packaging-time drift.
 verification_root="$(mktemp -d)"
-trap 'rm -rf "$verification_root"' EXIT
+echo "Archive verification files retained at: $verification_root"
 LC_ALL=C tar -xf "$output" -C "$verification_root"
 archive_evidence="$evidence_dir/archive-roundtrip"
 node scripts/pages-artifact-evidence.mjs \
@@ -56,5 +48,10 @@ node scripts/pages-artifact-evidence.mjs \
   --out "$archive_evidence"
 cmp "$evidence_dir/pages-tree.sha256" "$archive_evidence/pages-tree.sha256"
 
-sha256sum "$output" > "$evidence_dir/artifact.tar.sha256"
+node -e '
+  const { createHash } = require("node:crypto");
+  const { readFileSync } = require("node:fs");
+  const path = process.argv[1];
+  process.stdout.write(`${createHash("sha256").update(readFileSync(path)).digest("hex")}  ${path}\n`);
+' "$output" > "$evidence_dir/artifact.tar.sha256"
 echo "Packaged deterministic Pages artifact: $output"
