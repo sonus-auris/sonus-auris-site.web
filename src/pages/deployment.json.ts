@@ -13,6 +13,13 @@ const refName = rawRefName || (commitSha ? 'unknown' : 'local');
 const sourceUrl = commitSha
   ? `https://github.com/${repository}/commit/${commitSha}`
   : null;
+const requestedBuildEnvironment =
+  process.env.SONUS_AURIS_BUILD_ENVIRONMENT?.trim() || '';
+const buildEnvironment =
+  requestedBuildEnvironment || (commitSha ? 'github-actions' : 'local');
+if (!['local', 'github-actions', 'production'].includes(buildEnvironment)) {
+  throw new Error('SONUS_AURIS_BUILD_ENVIRONMENT is invalid');
+}
 
 const deployment = Object.freeze({
   schemaVersion: 1,
@@ -20,7 +27,7 @@ const deployment = Object.freeze({
   commitSha,
   refName,
   sourceUrl,
-  buildEnvironment: commitSha ? 'github-actions' : 'local',
+  buildEnvironment,
 });
 
 export const GET: APIRoute = () =>
