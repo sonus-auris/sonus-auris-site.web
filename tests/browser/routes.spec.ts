@@ -77,7 +77,7 @@ for (const route of ROUTES) {
       const policy = (await csp.getAttribute("content")) ?? "";
       for (const directive of [
         "default-src 'self'",
-        "script-src 'none'",
+        "script-src 'self' https://ores-chat.github.io",
         "object-src 'none'",
         "base-uri 'none'",
         "form-action 'self'",
@@ -93,9 +93,21 @@ for (const route of ROUTES) {
         "strict-origin-when-cross-origin",
       );
 
-      // The policy above is only honest if the page really has no scripts or
-      // document-wide base URL override.
-      await expect(page.locator("script")).toHaveCount(0);
+      // The policy above is only honest if the page contains exactly the
+      // integrity-pinned ORES Chat module and no inline executable content.
+      const scripts = page.locator("script");
+      await expect(scripts).toHaveCount(1);
+      await expect(scripts).toHaveAttribute(
+        "src",
+        "https://ores-chat.github.io/components/v1/ores-chat-footer-link.js",
+      );
+      await expect(scripts).toHaveAttribute("type", "module");
+      await expect(scripts).toHaveAttribute(
+        "integrity",
+        "sha256-jtetSlJDWLAWg2+zQIZGUX71OYlIKkZ9sbPnFMup5SE=",
+      );
+      await expect(scripts).toHaveAttribute("crossorigin", "anonymous");
+      await expect(scripts).toHaveText("");
       await expect(page.locator("base")).toHaveCount(0);
     });
 
