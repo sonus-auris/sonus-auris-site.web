@@ -27,15 +27,16 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 // in `_headers` for a future CDN/origin migration and must not be represented as
 // active response headers today.
 //
-// The generated site intentionally has no client JavaScript, remote connections,
-// frames, workers, plugins, or document base override. Keep this policy aligned
-// with `public/_headers`, `tests/security-metadata.test.mjs`, and the independent
-// deployed-runtime browser gates in sonus-auris-e2e.
+// The only client JavaScript is the exact, integrity-pinned ORES Chat footer
+// component. Link mode performs no API connection and retains a normal anchor
+// fallback. Keep this policy aligned with `public/_headers`,
+// `tests/security-metadata.test.mjs`, and the independent deployed-runtime
+// browser gates in sonus-auris-e2e.
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'none'",
   "object-src 'none'",
-  "script-src 'none'",
+  "script-src 'self' https://ores-chat.github.io",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self'",
   "img-src 'self' data:",
@@ -93,6 +94,13 @@ const fontFaceCss = `@font-face {
       crossorigin
     />
     <style is:inline set:html={fontFaceCss}></style>
+    <script
+      is:inline
+      type="module"
+      src="https://ores-chat.github.io/components/v1/ores-chat-footer-link.js"
+      integrity="sha256-jtetSlJDWLAWg2+zQIZGUX71OYlIKkZ9sbPnFMup5SE="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <slot />

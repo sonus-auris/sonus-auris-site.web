@@ -77,7 +77,7 @@ for (const route of ROUTES) {
       const policy = (await csp.getAttribute("content")) ?? "";
       for (const directive of [
         "default-src 'self'",
-        "script-src 'none'",
+        "script-src 'self' https://ores-chat.github.io",
         "object-src 'none'",
         "base-uri 'none'",
         "form-action 'self'",

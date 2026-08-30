@@ -9,7 +9,7 @@ const enforcedDirectives = new Map([
   ['default-src', ["'self'"]],
   ['base-uri', ["'none'"]],
   ['object-src', ["'none'"]],
-  ['script-src', ["'none'"]],
+  ['script-src', ["'self'", 'https://ores-chat.github.io']],
   ['style-src', ["'self'", "'unsafe-inline'"]],
   ['font-src', ["'self'"]],
   ['img-src', ["'self'", 'data:']],
@@ -79,7 +79,7 @@ function assertPolicy(actual, expected, label) {
   }
 }
 
-test('every generated page enforces the no-script, no-connect static-site contract', () => {
+test('every generated page permits only the integrity-pinned footer component and no connections', () => {
   const htmlFiles = walk(dist).filter((file) => file.endsWith('.html'));
   assert.ok(htmlFiles.length >= 4, `expected at least four HTML pages, found ${htmlFiles.length}`);
 
@@ -89,11 +89,18 @@ test('every generated page enforces the no-script, no-connect static-site contra
     const encodedCsp = metaContent(html, 'http-equiv', 'Content-Security-Policy');
     assert.ok(encodedCsp, `${relative}: missing Content-Security-Policy meta element`);
     assertPolicy(directives(decodeAttribute(encodedCsp)), enforcedDirectives, relative);
-    assert.doesNotMatch(
-      html,
-      /<script\b/i,
-      `${relative}: script-src is none but a script element was generated`,
+    const scripts = [...html.matchAll(/<script\b[^>]*>/gi)].map((match) => match[0]);
+    assert.equal(scripts.length, 1, `${relative}: unexpected script count`);
+    assert.equal(attribute(scripts[0], 'type'), 'module');
+    assert.equal(
+      attribute(scripts[0], 'src'),
+      'https://ores-chat.github.io/components/v1/ores-chat-footer-link.js',
     );
+    assert.equal(
+      attribute(scripts[0], 'integrity'),
+      'sha256-jtetSlJDWLAWg2+zQIZGUX71OYlIKkZ9sbPnFMup5SE=',
+    );
+    assert.equal(attribute(scripts[0], 'crossorigin'), 'anonymous');
 
     assert.equal(
       metaContent(html, 'name', 'referrer'),
