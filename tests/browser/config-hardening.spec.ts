@@ -182,7 +182,17 @@ test.describe("hostile deployment configuration", () => {
     await expect(
       page.locator('head meta[http-equiv="Content-Security-Policy"]'),
     ).toHaveCount(1);
-    await expect(page.locator("script")).toHaveCount(0);
+    const scripts = page.locator("script");
+    await expect(scripts).toHaveCount(1);
+    await expect(scripts).toHaveAttribute(
+      "src",
+      "https://ores-chat.github.io/components/v1/ores-chat-footer-link.js",
+    );
+    await expect(scripts).toHaveAttribute(
+      "integrity",
+      "sha256-jtetSlJDWLAWg2+zQIZGUX71OYlIKkZ9sbPnFMup5SE=",
+    );
+    await expect(scripts).toHaveText("");
     await expect(
       page.locator("footer.footer").getByRole("link", {
         name: "Privacy policy",
